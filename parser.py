@@ -57,7 +57,7 @@ class Stage(Record):
 			elif self.properties["stagetype"] == "PxCopy":
 				return CopyStage(self.properties)
 			else:
-				print "Stage type not implemented"
+				print ("Stage type not implemented")
 				pp.pprint(self.properties)
 		elif self.properties["oletype"] == "CJSExceptionHandler":
 			return ExceptionHandlerStage(self.properties)
@@ -138,10 +138,10 @@ class DSX(object):
 							results.append(sub)
 			elif search_type == "STRING":
 				for job in self.jobs:
-					print where
+					print (where)
 					m = re.search(where["regex"], job.properties["raw"])
 					if m:
-						print m
+						print (m)
 						results.append(job)
 			return results		
 		else:
@@ -183,51 +183,51 @@ class Job(object):
 
 class OracleConnectorStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties) 
+		super().__init__(properties) 
 		self.properties = properties
 class RemoveDuplicatesStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties) 
+		super().__init__(properties) 
 		self.properties = properties
 class CopyStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties) 
+		super().__init__(properties) 
 		self.properties = properties
 class TransformerStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties)
+		super().__init__(properties)
 		self.properties = properties
 class SequentialFileStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties)
+		super().__init__(properties)
 		self.properties = properties
 class ExceptionHandlerStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties)
+		super().__init__(properties)
 		self.properties = properties
 class JobActivityStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties)
+		super().__init__(properties)
 		self.properties = properties
 class NotificationActivityStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties)
+		super().__init__(properties)
 		self.properties = properties
 class MailActivityStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties)
+		super().__init__(properties)
 		self.properties = properties
 class TerminatorActivityStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties)
+		super().__init__(properties)
 		self.properties = properties
 class UserVarsActivityStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties)
+		super().__init__(properties)
 		self.properties = properties
 class AggregatorStage(Stage):
 	def __init__(self, properties):
-		super(Stage, self).__init__(properties)
+		super().__init__(properties)
 		self.properties = properties
 
 #class SubRecord(object):
@@ -243,12 +243,12 @@ class DSXParser(object):
 				dsx_dict = self.parse_dsx(f.read())
 				d = DSX(dsx_dict)
 				return d
-		elif data:
-			dsx_dict = self.parse_dsx(data)
+		elif self.data:
+			dsx_dict = self.parse_dsx(self.data)
 			d = DSX(dsx_dict)
 			return d
 		else:
-			print "No file or data specified"
+			print ("No file or data specified")
 			raise Exception
 	def parse_dsx(self, dsx):
 		dsx_dict = {"jobs":[]}
@@ -479,8 +479,8 @@ if __name__ == "__main__":
 						del ins_and_outs[ins_and_outs.index(item)]
 						build(item, ins_and_outs)
 		for job in d.jobs:
-			print "______________________________________________________"
-			print job.properties["name"]
+			print ("______________________________________________________")
+			print (job.properties["name"])
 			ins_and_outs = []
 
 			for stage in job.stages:
@@ -515,13 +515,13 @@ if __name__ == "__main__":
 					return stage
 			return None
 		for job in d.jobs:
-			print "______________________________________________________"
-			print job.properties["name"]
+			print ("______________________________________________________")
+			print (job.properties["name"])
 			for link in job.links:
 				if link.properties["oletype"] == "CTrxOutput":
 
 					source = find_source_from_link(link.properties["identifier"], job.stages)
-					print source
+					print (source)
 					stage_vars = []
 					for sub in source.properties["subrecords"]:
 						try:
@@ -531,13 +531,13 @@ if __name__ == "__main__":
 						except KeyError:
 							pass
 
-					print "________________________________"
+					print ("________________________________")
 
 					for sub in link.properties["subrecords"]:
 						if sub.get("derivation"):
 							for sv in stage_vars:
 								if sv["name"] in sub.get("derivation"):
-									print sub.get("sourcecolumn"), "|", sub.get("derivation").replace(sv["name"], "#"+sv["expression"]+"#"), "|", sub.get("name")
+									print (sub.get("sourcecolumn"), "|", sub.get("derivation").replace(sv["name"], "#"+sv["expression"]+"#"), "|", sub.get("name"))
 									break
-							print sub.get("sourcecolumn"), "|", sub.get("derivation"), "|", sub.get("name")
+							print (sub.get("sourcecolumn"), "|", sub.get("derivation"), "|", sub.get("name"))
 
